@@ -5,7 +5,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style= {styles.container}>
-      <Text>Hi, my name is Jordan Huttsell, and I am a mobile developer.</Text>
+      Hi, my name is Jordan Huttsell, and I am a mobile developer.
+      </Text>
       <StatusBar style="auto" />
     </View>
   );
