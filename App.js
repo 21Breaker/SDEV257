@@ -8,16 +8,11 @@ import {
   StatusBar,
 } from 'react-native';
 
-// Box component renders an individual box with a background color and a centered number.
+// Box component renders an individual box with a background color and centered number.
 const Box = ({ children, style, backgroundColor }) => (
   <View style={[styles.box, { backgroundColor }, style]}>
     <Text style={styles.boxText}>{children}</Text>
   </View>
-);
-
-// Row component lays out its children horizontally.
-const Row = ({ children, style }) => (
-  <View style={[styles.row, style]}>{children}</View>
 );
 
 // Column component lays out its children vertically.
@@ -26,31 +21,49 @@ const Column = ({ children, style }) => (
 );
 
 export default function App() {
+  // Create an array [1, 2, ..., 12]
+  const boxes = Array.from({ length: 12 }, (_, i) => i + 1);
+  // Determine the midpoint to split the boxes array in half.
+  const midpoint = Math.ceil(boxes.length / 2);
+  const leftBoxes = boxes.slice(0, midpoint);
+  const rightBoxes = boxes.slice(midpoint);
+
+  // Define an array of 12 colors to assign each box a unique background color.
+  const colors = [
+    "cornflowerblue", 
+    "mediumseagreen", 
+    "tomato", 
+    "plum", 
+    "orange", 
+    "pink",
+    "mediumpurple",
+    "skyblue",
+    "lightgreen",
+    "coral",
+    "gold",
+    "lightblue"
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* First row: two columns (each with two boxes stacked vertically) */}
-      <Row style={{ flex: 2 }}>
-        <Column style={{ flex: 1 }}>
-          <Box backgroundColor="cornflowerblue">1</Box>
-          <Box backgroundColor="mediumseagreen">2</Box>
+      <View style={styles.row}>
+        {/* Left Column: Boxes 1 through 6 */}
+        <Column style={styles.columnSide}>
+          {leftBoxes.map(num => (
+            <Box key={num} backgroundColor={colors[num - 1]}>
+              {num}
+            </Box>
+          ))}
         </Column>
-        <Column style={{ flex: 1 }}>
-          <Box backgroundColor="tomato">3</Box>
-          <Box backgroundColor="plum">4</Box>
+        {/* Right Column: Boxes 7 through 12 */}
+        <Column style={styles.columnSide}>
+          {rightBoxes.map(num => (
+            <Box key={num} backgroundColor={colors[num - 1]}>
+              {num}
+            </Box>
+          ))}
         </Column>
-      </Row>
-      {/* Second row: three boxes arranged horizontally */}
-      <Row style={{ flex: 1 }}>
-        <Box backgroundColor="orange" style={{ flex: 1 }}>
-          5
-        </Box>
-        <Box backgroundColor="pink" style={{ flex: 1 }}>
-          6
-        </Box>
-        <Box backgroundColor="mediumpurple" style={{ flex: 1 }}>
-          7
-        </Box>
-      </Row>
+      </View>
     </SafeAreaView>
   );
 }
@@ -59,31 +72,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // Ensure that on Android, the content appears below the status bar.
+    // Ensure content on Android appears below the status bar.
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
-  // The row style defines a container that arranges children side by side.
+  // The row arranges the two columns side by side.
   row: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: 5,
   },
-  // The column style stacks children vertically.
   column: {
-    flexDirection: 'column',
+    padding: 10,
+  },
+  // Each column equally shares the screen space.
+  columnSide: {
+    flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    padding: 5,
+    padding: 10,
   },
-  // The box style removes any fixed width and sets alignSelf to 'stretch'
-  // so that in a column layout it fills the available width.
+  // Box style defines consistent size and appearance.
   box: {
     margin: 5,
+    height: 100,
+    width: '90%', // Adjust this percentage based on desired width.
     justifyContent: 'center',
     alignItems: 'center',
-    height: 100,
-    alignSelf: 'stretch',
   },
   boxText: {
     fontSize: 20,
